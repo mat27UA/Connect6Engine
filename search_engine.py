@@ -7,6 +7,9 @@ class SearchEngine():
         self.m_alphabeta_depth = None
         self.m_total_nodes = 0 # Número total de nodos explorados
         self.m_total_prunes = 0 # Número total de podas realizadas
+        self.m_bonus_followed_busy_positions = [0, 20, 200, 1000, 4000, 10000]
+        self.m_bonus_block_enemy = 10000
+        self.m_bonus_center = 200
         self.transposition_table = {}
 
     def before_search(self, board, color, alphabeta_depth):
@@ -99,8 +102,8 @@ class SearchEngine():
                         possible_stone_moves.add(StonePosition(x, y))
         
         # Añadir posiciones que tapen posibles movimientos potenciales del enemigo
-         for i in range(len(self.m_board)):
-            for j in range(len(self.m_board[i])):
+         for i in range(1, len(self.m_board)-1):
+            for j in range(1, len(self.m_board[i])-1):
                 if self.m_board[i][j] == self.m_chess_type ^ 3:
                     for x in range(i - 1, i + 2):
                         for y in range(j - 1, j + 2):
@@ -108,6 +111,63 @@ class SearchEngine():
                                 possible_stone_moves.add(StonePosition(x, y))
         
         return list(possible_stone_moves)
+    
+    def count_in_direction(x, y, dx, dy, ourColor):
+        followed_busy_positions, open_ends = 0, 0
+        
+        # Se verifica el número de piezas del color seguidas en la dirección especificada
+        while isValidPos(x, y) and self.m_board[x][y] == ourColor: # Añadir un and free_positions_count < 5
+            followed_busy_positions += 1
+            x += dx
+            y += dy
+
+        # Se verifican si los extremos están abiertos
+        if isValidPos(x, y) and self.m_board[x][y] == Defines.NOSTONE:
+            open_ends += 1
+
+        return followed_busy_positions, open_ends
+
+    def evaluate_position(self, ourColor, move):
+        
+        x, y = move.x, move.y
+        total_score = 0
+
+        # Se obtiene una bonificación por la proximidad de la ficha al centro del tablero
+        total_score += self.m_bonus_center / (1 + (((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5))
+       
+        '''
+        Direcciones:
+            (1, 0) --> Vertical abajo
+            (0, 1) --> Horizontal derecha
+            (1, 1) --> Diagonal derecha-abajo
+            (-1, 1) --> Diagonal derecha-arriba
+
+            (1, -1) --> Diagonal izquierda-abajo
+            (-1, -1) --> Diagonal izquierda-arriba
+            (-1, 0) --> Vertical arriba
+            (0, -1) --> Horizontal izquieda
+        ''' 
+
+        for dx, dy in [(1, 0), (0, 1), (1, 1), (-1, 1), (1, -1), (-1, -1), (-1, 0), (0, -1)]:
+            our_followed_busy_positions, our_open_ends = count_in_direction(x + dx, y + dy, dx, dy, ourColor)
+            enemy_followed_busy_positions, enemy_open_ends = count_in_direction(x + dx, y + dy, dx, dy, ourColor ^ 3)
+            
+            # Se comprueba si la máquina o el enemigo tienen 6 fichas o más en dicha dirección y por tanto, habrían ganado la partida.
+            if our_followed_busy_positions >= 6: 
+                return Defines.MAXINT
+            else if enemy_followed_busy_positions >= 6:
+                return Defines.MININT
+
+            # A continuación, si ninguno de los dos jugadores ha ganado.
+            # Se obtiene la puntuación únicamente si tenemos extremos abiertos.
+            if our_open_ends != 0:
+                total_score += self.m_bonus_followed_busy_positions[our_followed_busy_positions]
+            
+            # Se comprueba si el oponente tiene líneas fuertes para bloquearlas.
+            if enemy_open_ends != 0 and enemy_followed_busy_positions > 3:
+                total_score += self.m_bonus_block_enemy * (enemy_followed_busy_positions - 3)
+
+        return total_score
 
 def flush_output():
     import sys
