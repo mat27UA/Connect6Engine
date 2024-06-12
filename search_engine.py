@@ -45,7 +45,7 @@ class SearchEngine():
             best_score = Defines.MININT
             best_move1, best_move2 = None
 
-            possible_moves = find_possible_move(bestMove)
+            possible_moves = self.find_possible_move(bestMove)
             
             for move1 in possible_moves:
                 aux_move1 = StoneMove([move1, move1]) # Se define la posición de las fichas, concretamente de la primera. Haciendo inicialmente que las dos fichas se sitúen en la misma posición.
@@ -102,7 +102,7 @@ class SearchEngine():
                         possible_stone_moves.add(StonePosition(x, y))
         
         # Añadir posiciones que tapen posibles movimientos potenciales del enemigo
-         for i in range(1, len(self.m_board)-1):
+        for i in range(1, len(self.m_board)-1):
             for j in range(1, len(self.m_board[i])-1):
                 if self.m_board[i][j] == self.m_chess_type ^ 3:
                     for x in range(i - 1, i + 2):
@@ -112,7 +112,7 @@ class SearchEngine():
         
         return list(possible_stone_moves)
     
-    def count_in_direction(x, y, dx, dy, ourColor):
+    def count_in_direction(self, x, y, dx, dy, ourColor):
         followed_busy_positions, open_ends = 0, 0
         
         # Se verifica el número de piezas del color seguidas en la dirección especificada
@@ -133,7 +133,7 @@ class SearchEngine():
         total_score = 0
 
         # Se obtiene una bonificación por la proximidad de la ficha al centro del tablero
-        total_score += self.m_bonus_center / (1 + (((x - center_x) ** 2 + (y - center_y) ** 2) ** 0.5))
+        total_score += self.m_bonus_center / (1 + (((x - 10) ** 2 + (y - 10) ** 2) ** 0.5))
        
         '''
         Direcciones:
@@ -149,13 +149,13 @@ class SearchEngine():
         ''' 
 
         for dx, dy in [(1, 0), (0, 1), (1, 1), (-1, 1), (1, -1), (-1, -1), (-1, 0), (0, -1)]:
-            our_followed_busy_positions, our_open_ends = count_in_direction(x + dx, y + dy, dx, dy, ourColor)
-            enemy_followed_busy_positions, enemy_open_ends = count_in_direction(x + dx, y + dy, dx, dy, ourColor ^ 3)
+            our_followed_busy_positions, our_open_ends = self.count_in_direction(x + dx, y + dy, dx, dy, ourColor)
+            enemy_followed_busy_positions, enemy_open_ends = self.count_in_direction(x + dx, y + dy, dx, dy, ourColor ^ 3)
             
             # Se comprueba si la máquina o el enemigo tienen 6 fichas o más en dicha dirección y por tanto, habrían ganado la partida.
             if our_followed_busy_positions >= 6: 
                 return Defines.MAXINT
-            else if enemy_followed_busy_positions >= 6:
+            elif enemy_followed_busy_positions >= 6:
                 return Defines.MININT
 
             # A continuación, si ninguno de los dos jugadores ha ganado.
