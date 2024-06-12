@@ -11,8 +11,8 @@ class GameEngine:
                 self.m_engine_name = name
             else:
                 print(f"Too long Engine Name: {name}, should be less than: {Defines.MSG_LENGTH}")
-        self.m_alphabeta_depth = 3
-        self.m_board = t = [ [0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
+        self.m_alphabeta_depth = 2
+        self.m_board = [ [0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
         self.init_game()
         self.m_search_engine = SearchEngine()
         self.m_best_move = StoneMove()
@@ -67,6 +67,7 @@ class GameEngine:
                 if self.search_a_move(self.m_chess_type, self.m_best_move):
                     make_move(self.m_board, self.m_best_move, self.m_chess_type)
                     msg = f"move {move2msg(self.m_best_move)}"
+                    print_board(self.m_board)
                     print(msg)
                     flush_output()
             elif msg.startswith("new"):
@@ -88,7 +89,8 @@ class GameEngine:
                 if self.search_a_move(self.m_chess_type, self.m_best_move):
                     msg = f"move {move2msg(self.m_best_move)}"
                     make_move(self.m_board, self.m_best_move, self.m_chess_type)
-                    print(msg)
+                    print('BestMove: ', msg)
+                    print_board(self.m_board)
                     flush_output()
             elif msg.startswith("depth"):
                 d = int(msg[6:])
@@ -110,7 +112,8 @@ class GameEngine:
         end = time.perf_counter()
 
         print(f"AB Time:\t{end - start:.3f}")
-        print(f"Node:\t{self.m_search_engine.m_total_nodes}\n")
+        print(f"Nodes:\t{self.m_search_engine.m_total_nodes}\n")
+        print(f"Prunes:\t{self.m_search_engine.m_total_prunes}\n")
         print(f"Score:\t{score:.3f}")
         return True
 

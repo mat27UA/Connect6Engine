@@ -3,7 +3,7 @@ import time
 
 # Point (x, y) if in the valid position of the board.
 def isValidPos(x,y):
-    return x>0 and x<Defines.GRID_NUM-1 and y>0 and y<Defines.GRID_NUM-1
+    return x>=0 and x<Defines.GRID_NUM and y>=0 and y<Defines.GRID_NUM
     
 def init_board(board):
     for i in range(21):

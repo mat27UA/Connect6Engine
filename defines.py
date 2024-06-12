@@ -8,8 +8,8 @@ class Defines:
     MSG_LENGTH=512 #Tamaño del mensaje
     GRID_NUM=21 #Number of the board, 19*19 plus edges.
     GRID_COUNT=361 #Sum of the points in the board.
-    LOG_FILE="tia-engine.log"
-    ENGINE_NAME="TIA.Connect6"
+    LOG_FILE="tia-matmrm-engine.log"
+    ENGINE_NAME="matmrm"
     # Max values in the evaluation.
     MAXINT=20000
     MININT=-20000
@@ -18,10 +18,23 @@ class StonePosition:
     def __init__(self,x,y):
         self.x = x
         self.y = y
+    
+    def __hash__(self):
+        return hash(f'{self.x}{self.y}')
+
+    def __eq__(self, other_StonePosition):
+        if not isinstance(other_StonePosition, StonePosition):
+            return False
+        return self.x == other_StonePosition.x or self.y == other_StonePosition.y
+
+    def __ne__(self, other_StonePosition):
+        if not isinstance(other_StonePosition, StonePosition):
+            return False
+        return self.x != other_StonePosition.x or self.y != other_StonePosition.y
 
 class StoneMove:
-    def __init__(self):
-        self.positions = [StonePosition(0,0),StonePosition(0,0)]
+    def __init__(self, positions=[StonePosition(0,0),StonePosition(0,0)]):
+        self.positions = positions
         self.score = 0
 
 # One point and its value.
