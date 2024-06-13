@@ -19,7 +19,7 @@ class SearchEngine:
         self.transposition_table = {}
 
     def hash_board(self):
-        """ Generate a unique hash for the current board position. """
+        # Se genera un unico hash para la posición actual de la tabla
         return hashlib.sha256(str(self.m_board).encode()).hexdigest()
 
     def alpha_beta_search(self, depth, alpha, beta, ourColor, bestMove, preMove):
@@ -27,10 +27,10 @@ class SearchEngine:
         # Se incrementa el número de nodos explorados
         self.m_total_nodes += 1
 
-        # Generate a hash for the current board state
+        # Se genera el hash del estado actual de la tabla
         board_hash = self.hash_board()
 
-        # Check if the result of this position is already computed
+        # Se comprueba si el resultado de la posicion ya está calculado
         if board_hash in self.transposition_table and self.transposition_table[board_hash]['depth'] >= depth:
             return self.transposition_table[board_hash]['score']
 
@@ -146,8 +146,7 @@ class SearchEngine:
         BONUS_BLOCK_ENEMY = 350
         BONUS_CENTER = 10
         
-        BONUS_ATTACK = 350  # Nuevo bono para posiciones ofensivas
-        BONUS_MULTIPLE_THREATS = 300  # Bono para amenazas múltiples
+        BONUS_ATTACK = 400  # Nuevo bono para posiciones ofensivas
 
         x, y = preMove.x, preMove.y
         total_score = 0
@@ -176,7 +175,7 @@ class SearchEngine:
         return total_score + center_bonus
 
     def check_first_move(self):
-        # Check if it's the first move of the game
+        # Se comprueba si es el primer movimiento del juego
         for i in range(1, len(self.m_board) - 1):
             for j in range(1, len(self.m_board[i]) - 1):
                 if self.m_board[i][j] != Defines.NOSTONE:

@@ -4,4 +4,5 @@ build
 dist
 main.spec
 tia-engine.log
+tia-matmrm-engine.log
 env/
