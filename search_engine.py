@@ -146,6 +146,9 @@ class SearchEngine:
         BONUS_BLOCK_ENEMY = 350
         BONUS_CENTER = 10
         
+        BONUS_ATTACK = 350  # Nuevo bono para posiciones ofensivas
+        BONUS_MULTIPLE_THREATS = 300  # Bono para amenazas múltiples
+
         x, y = preMove.x, preMove.y
         total_score = 0
         
@@ -159,9 +162,13 @@ class SearchEngine:
                 return float('-inf')
             
             total_score += BONUS_BUSY_POSITION[our_total_count] * our_total_open_ends
+            
+            # Añadir bonificaciones ofensivas
+            if our_total_count > 3 and our_total_open_ends > 0:
+                total_score += BONUS_ATTACK * (our_total_count - 3)
 
-            if enemy_total_count > 3 and enemy_total_open_ends > 0:
-                total_score += BONUS_BLOCK_ENEMY * (enemy_total_count - 3)
+            elif enemy_total_count > 3 and enemy_total_open_ends > 0:
+                total_score += BONUS_BLOCK_ENEMY * (enemy_total_count - 3)            
 
         distance_to_center = ((x - 9) ** 2 + (y - 9) ** 2) ** 0.5
         center_bonus = BONUS_CENTER / (1 + distance_to_center)
