@@ -13,7 +13,7 @@ class GameEngine:
             else:
                 print(f"Too long Engine Name: {name}, should be less than: {Defines.MSG_LENGTH}")
         self.m_alphabeta_depth = 2
-        self.m_board = t = [[0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
+        self.m_board = [[0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
         self.m_search_engine = SearchEngine()
         self.init_game()
         self.m_best_move = StoneMove()
@@ -104,12 +104,12 @@ class GameEngine:
            globals(), locals())
         end = time.perf_counter()
 
-        print(f"==================================")
+        print("Result:")
         print(f"AB Time:\t{end - start:.3f}")
-        print(f"Node:\t{self.m_search_engine.m_total_nodes}")
-        print(f"Beta pod:\t{self.m_search_engine.m_total_prunes}")
+        print(f"Total nodes:\t{self.m_search_engine.m_total_nodes}")
+        print(f"Total prunes:\t{self.m_search_engine.m_total_prunes}")
         print(f"Score:\t{self.m_best_move.score:.3f}")
-        print(f"BestMove:\t{bestMove}\n")
+        print(f"Best move:\t{bestMove}\n")
         return True
 
 def flush_output():
