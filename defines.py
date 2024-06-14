@@ -14,30 +14,30 @@ class Defines:
     MAXINT=20000
     MININT=-20000
 
+
 class StonePosition:
-    def __init__(self,x,y):
+    def __init__(self, x, y):
         self.x = x
         self.y = y
-    
-    def __hash__(self):
-        return hash(f'{self.x}{self.y}')
 
-    def __eq__(self, other_StonePosition):
-        if not isinstance(other_StonePosition, StonePosition):
+    def __eq__(self, other):
+        if not isinstance(other, StonePosition):
             return False
-        return self.x == other_StonePosition.x or self.y == other_StonePosition.y
+        return self.x == other.x and self.y == other.y
 
     def __ne__(self, other_StonePosition):
         if not isinstance(other_StonePosition, StonePosition):
             return False
         return self.x != other_StonePosition.x or self.y != other_StonePosition.y
 
+    def __hash__(self):
+        return hash(f'{self.x}{self.y}')
+
 class StoneMove:
-    def __init__(self, positions=[StonePosition(0,0),StonePosition(0,0)]):
+    def __init__(self, positions=[StonePosition(0, 0), StonePosition(0, 0)]):
         self.positions = positions
         self.score = 0
 
-# One point and its value.
 class Chess:
     def __init__(x,y,score):
         self.x = x
