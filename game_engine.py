@@ -62,7 +62,7 @@ class GameEngine:
                     make_move(self.m_board, self.m_best_move, self.m_chess_type)
                     msg = f"move {move2msg(self.m_best_move)}"
                     print_board(self.m_board)
-                    print(msg)
+                    #print(msg)
                     flush_output()
             elif msg.startswith("new"):
                 self.init_game()
@@ -71,7 +71,7 @@ class GameEngine:
                     make_move(self.m_board, self.m_best_move, Defines.BLACK)
                     self.m_chess_type = Defines.BLACK
                     msg = "move JJ"
-                    print(msg)
+                    #print(msg)
                     flush_output()
                 else:
                     self.m_chess_type = Defines.WHITE
@@ -84,7 +84,7 @@ class GameEngine:
                     msg = f"move {move2msg(self.m_best_move)}"
                     make_move(self.m_board, self.m_best_move, self.m_chess_type)
                     print_board(self.m_board)
-                    print(msg)
+                    #print(msg)
                     flush_output()
             elif msg.startswith("depth"):
                 self.m_alphabeta_depth = self.m_alphabeta_depth
@@ -105,11 +105,11 @@ class GameEngine:
         end = time.perf_counter()
 
         print("Result:")
-        print(f"AB Time:\t{end - start:.3f}")
-        print(f"Total nodes:\t{self.m_search_engine.m_total_nodes}")
-        print(f"Total prunes:\t{self.m_search_engine.m_total_prunes}")
-        print(f"Score:\t{self.m_best_move.score:.3f}")
-        print(f"Best move:\t{bestMove}\n")
+        print(f"AB Time: {end - start:.3f}")
+        print(f"Total nodes: {self.m_search_engine.m_total_nodes}")
+        print(f"Total prunes: {self.m_search_engine.m_total_prunes}")
+        print(f"Score: {self.m_best_move.score:.3f}")
+        print(f"Best move: {move2msg(bestMove)}\n")
         return True
 
 def flush_output():
