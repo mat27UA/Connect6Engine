@@ -13,7 +13,7 @@ class GameEngine:
             else:
                 print(f"Too long Engine Name: {name}, should be less than: {Defines.MSG_LENGTH}")
         self.m_alphabeta_depth = 2
-        self.m_board = t = [[0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
+        self.m_board = [[0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
         self.m_search_engine = SearchEngine()
         self.init_game()
         self.m_best_move = StoneMove([StonePosition(0, 0), StonePosition(0, 0)])
@@ -93,7 +93,6 @@ class GameEngine:
         return 0
 
     def search_a_move(self, ourColor, bestMove):
-        score = 0
         start = 0
         end = 0
 
@@ -107,10 +106,10 @@ class GameEngine:
         #score = self.m_search_engine.alpha_beta_search(self.m_alphabeta_depth, Defines.MININT, Defines.MAXINT, ourColor, bestMove, bestMove)
         end = time.perf_counter()
 
-        print(f"==================================")
+        print(f"Result: ")
         print(f"AB Time:\t{end - start:.3f}")
-        print(f"Node:\t{self.m_search_engine.m_total_nodes}\n")
-        print(f"Beta pod:\t{self.m_search_engine.m_total_prunes}\n")
+        print(f"Total Nodes:\t{self.m_search_engine.m_total_nodes}\n")
+        print(f"Total Prunes:\t{self.m_search_engine.m_total_prunes}\n")
         print(f"Score:\t{self.m_best_move.score:.3f}")
         print(f"BestMove:\t{bestMove}")
         return True
