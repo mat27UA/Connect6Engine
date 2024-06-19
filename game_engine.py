@@ -108,10 +108,10 @@ class GameEngine:
 
         print(f"Result: ")
         print(f"AB Time:\t{end - start:.3f}")
-        print(f"Total Nodes:\t{self.m_search_engine.m_total_nodes}\n")
-        print(f"Total Prunes:\t{self.m_search_engine.m_total_prunes}\n")
+        print(f"Total Nodes:\t{self.m_search_engine.m_total_nodes}")
+        print(f"Total Prunes:\t{self.m_search_engine.m_total_prunes}")
         print(f"Score:\t{self.m_best_move.score:.3f}")
-        print(f"BestMove:\t{bestMove}")
+        print(f"BestMove:\t{bestMove}\n")
         return True
 
 def flush_output():
