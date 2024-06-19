@@ -1,8 +1,8 @@
-import cProfile
 from tools import *
 import sys
 from search_engine import SearchEngine
 import time
+import cProfile
 
 class GameEngine:
     def __init__(self, name=Defines.ENGINE_NAME):
@@ -16,7 +16,7 @@ class GameEngine:
         self.m_board = [[0]*Defines.GRID_NUM for i in range(Defines.GRID_NUM)]
         self.m_search_engine = SearchEngine()
         self.init_game()
-        self.m_best_move = StoneMove([StonePosition(0, 0), StonePosition(0, 0)])
+        self.m_best_move = StoneMove()
 
     def init_game(self):
         init_board(self.m_board)
@@ -60,7 +60,7 @@ class GameEngine:
                 self.m_chess_type = self.m_chess_type ^ 3
                 if self.search_a_move(self.m_chess_type, self.m_best_move):
                     make_move(self.m_board, self.m_best_move, self.m_chess_type)
-                    msg = f"move {self.m_best_move}"
+                    msg = f"move {move2msg(self.m_best_move)}"
                     print_board(self.m_board)
                     print(msg)
                     flush_output()
@@ -81,7 +81,7 @@ class GameEngine:
                 if is_win_by_premove(self.m_board, self.m_best_move):
                     print("We lost!")
                 if self.search_a_move(self.m_chess_type, self.m_best_move):
-                    msg = f"move {self.m_best_move}"
+                    msg = f"move {move2msg(self.m_best_move)}"
                     make_move(self.m_board, self.m_best_move, self.m_chess_type)
                     print_board(self.m_board)
                     print(msg)
@@ -98,20 +98,18 @@ class GameEngine:
 
         start = time.perf_counter()
         self.m_search_engine.before_search(self.m_board, self.m_chess_type, self.m_alphabeta_depth)
-        # Profile of alpha_beta_search
         cProfile.runctx(
             "score = self.m_search_engine.alpha_beta_search(self.m_alphabeta_depth, Defines.MININT, Defines.MAXINT, "
             "ourColor, bestMove, bestMove)",
            globals(), locals())
-        #score = self.m_search_engine.alpha_beta_search(self.m_alphabeta_depth, Defines.MININT, Defines.MAXINT, ourColor, bestMove, bestMove)
         end = time.perf_counter()
 
-        print(f"Result: ")
+        print("Result:")
         print(f"AB Time:\t{end - start:.3f}")
-        print(f"Total Nodes:\t{self.m_search_engine.m_total_nodes}")
-        print(f"Total Prunes:\t{self.m_search_engine.m_total_prunes}")
+        print(f"Total nodes:\t{self.m_search_engine.m_total_nodes}")
+        print(f"Total prunes:\t{self.m_search_engine.m_total_prunes}")
         print(f"Score:\t{self.m_best_move.score:.3f}")
-        print(f"BestMove:\t{bestMove}\n")
+        print(f"Best move:\t{bestMove}\n")
         return True
 
 def flush_output():

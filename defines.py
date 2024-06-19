@@ -1,16 +1,19 @@
 class Defines:
-    GRID_NUM = 21       # Number of the board, 19*19 plus edges.
-    GRID_COUNT = 361    # Sum of the points in the board.
-    BLACK = 1           # Black flag in the board.
-    WHITE = 2           # White flag in the board.
-    BORDER = 3          # Border flag in the board
-    NOSTONE = 0         # Empty flag.
-    MSG_LENGTH = 512    # Tamaño del mensaje
-    LOG_FILE = "tia-matmrm-engine.log"
-    ENGINE_NAME = "matmrm"
+    GRID_NUM=21          # Number of the board, 19*19 plus edges.
+    GRID_COUNT=361         # Sum of the points in the board.
+    BLACK=1           # Black flag in the board.
+    WHITE=2           # White flag in the board.
+    BORDER=3          # Border flag in the board.
+    NOSTONE=0           # Empty flag.
+    MSG_LENGTH=512 #Tamaño del mensaje
+    GRID_NUM=21 #Number of the board, 19*19 plus edges.
+    GRID_COUNT=361 #Sum of the points in the board.
+    LOG_FILE="tia-matmrm-engine.log"
+    ENGINE_NAME="matmrm"
     # Max values in the evaluation.
-    MAXINT = 20000
-    MININT = -20000
+    MAXINT=20000
+    MININT=-20000
+
 
 class StonePosition:
     def __init__(self, x, y):
@@ -22,37 +25,18 @@ class StonePosition:
             return False
         return self.x == other.x and self.y == other.y
 
+    def __ne__(self, other_StonePosition):
+        if not isinstance(other_StonePosition, StonePosition):
+            return False
+        return self.x != other_StonePosition.x or self.y != other_StonePosition.y
+
     def __hash__(self):
         return hash(f'{self.x}{self.y}')
 
 class StoneMove:
-    def __init__(self, positions):
+    def __init__(self, positions=[StonePosition(0, 0), StonePosition(0, 0)]):
         self.positions = positions
         self.score = 0
-
-    def __iter__(self):
-        return iter(self.positions)
-
-    def __eq__(self, other):
-        if not isinstance(other, StoneMove):
-            return False
-
-        return set(self.positions) == set(other.positions)
-
-    def __hash__(self):
-        items_list = list()
-        for item in self:
-            items_list.append(hash(item))
-        return hash(tuple(items_list))
-
-    def __str__(self):
-        if self.positions[0].x == self.positions[1].x and self.positions[0].y == self.positions[1].y:
-            msg = f"{chr(ord('S') - self.positions[0].x + 1)}{chr(self.positions[0].y + ord('A') - 1)}"
-            return msg
-        else:
-            msg = f"{chr(self.positions[0].y + ord('A') - 1)}{chr(ord('S') - self.positions[0].x + 1)}" \
-                  f"{chr(self.positions[1].y + ord('A') - 1)}{chr(ord('S') - self.positions[1].x + 1)}"
-            return msg
 
 class Chess:
     def __init__(x,y,score):

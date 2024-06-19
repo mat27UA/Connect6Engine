@@ -54,6 +54,7 @@ class SearchEngine:
         best_move1, best_move2 = None, None
 
         for move1 in possible_moves:
+            # No aporta valor --> se puede quitar
             aux_move1 = StoneMove([move1, move1])
             make_move(self.m_board, aux_move1, ourColor)
             score1 = self.evaluate_position(ourColor, move1)
@@ -107,10 +108,10 @@ class SearchEngine:
                     if isValidPos(x, y) and self.m_board[x][y] == Defines.NOSTONE:
                         possible_stone_moves.add(StonePosition(x, y))
         
-        # Añadir posiciones que controlen posiciones del la máquina
+        # Añadir posiciones que tapen posibles movimientos potenciales del enemigo
         for i in range(len(self.m_board)):
             for j in range(len(self.m_board[i])):
-                if self.m_board[i][j] == self.m_chess_type:
+                if self.m_board[i][j] == self.m_chess_type ^ 3:
                     for x in range(i - 1, i + 2):
                         for y in range(j - 1, j + 2):
                             if isValidPos(x, y) and self.m_board[x][y] == Defines.NOSTONE:
