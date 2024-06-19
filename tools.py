@@ -1,10 +1,12 @@
 from defines import *
 import time
 
+
 # Point (x, y) if in the valid position of the board.
-def isValidPos(x,y):
-    return x>=0 and x<Defines.GRID_NUM and y>=0 and y<Defines.GRID_NUM
-    
+def isValidPos(x, y):
+    return 0 <= x < Defines.GRID_NUM and 0 <= y < Defines.GRID_NUM
+
+
 def init_board(board):
     for i in range(21):
         board[i][0] = board[0][i] = board[i][Defines.GRID_NUM - 1] = board[Defines.GRID_NUM - 1][i] = Defines.BORDER
@@ -109,19 +111,3 @@ def print_board(board, preMove=None):
         print(" ", end="")
         print(f"{chr(ord('A') - 1 + i)}", end="\n")
     print("   " + "".join([chr(i + ord('A') - 1) + " " for i in range(1, Defines.GRID_NUM - 1)]))
-
-def print_score(move_list, n):
-    board = [[0] * Defines.GRID_NUM for _ in range(Defines.GRID_NUM)]
-    for move in move_list:
-        board[move.x][move.y] = move.score
-
-    print("  " + "".join([f"{i:4}" for i in range(1, Defines.GRID_NUM - 1)]))
-    for i in range(1, Defines.GRID_NUM - 1):
-        print(f"{i:2}", end="")
-        for j in range(1, Defines.GRID_NUM - 1):
-            score = board[i][j]
-            if score == 0:
-                print("   -", end="")
-            else:
-                print(f"{score:4}", end="")
-        print()

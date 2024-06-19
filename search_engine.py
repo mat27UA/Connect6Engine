@@ -111,7 +111,7 @@ class SearchEngine:
         # Añadir posiciones que tapen posibles movimientos potenciales del enemigo
         for i in range(len(self.m_board)):
             for j in range(len(self.m_board[i])):
-                if self.m_board[i][j] == self.m_chess_type ^ 3:
+                if self.m_board[i][j] == self.m_chess_type:
                     for x in range(i - 1, i + 2):
                         for y in range(j - 1, j + 2):
                             if isValidPos(x, y) and self.m_board[x][y] == Defines.NOSTONE:
