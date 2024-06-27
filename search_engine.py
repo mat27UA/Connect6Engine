@@ -54,7 +54,6 @@ class SearchEngine:
         best_move1, best_move2 = None, None
 
         for move1 in possible_moves:
-            # No aporta valor --> se puede quitar
             aux_move1 = StoneMove([move1, move1])
             make_move(self.m_board, aux_move1, ourColor)
             score1 = self.evaluate_position(ourColor, move1)
